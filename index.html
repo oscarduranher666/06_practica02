@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <title>Almacen de Ropa</title>
+</head>
+<body class="bg-light">
+    <header class="container-fluid bg-primary text-white text-center py-4">
+        <h1>Almacen de Ropa</h1>
+    </header>
+    
+    <section id="almacen" class="container mt-4">
+        <div class="card shadow mb-4">
+            <div class="card-body">
+                <h3 class="card-title text-center">Agregar Prenda</h3>
+                <form @submit.prevent="agregarPrenda()">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <input type="text" v-model="nuevaPrenda.nombre" class="form-control" placeholder="Nombre de la prenda" required>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="number" v-model.number="nuevaPrenda.cantidad" class="form-control" placeholder="Cantidad" min="1" required>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="number" v-model.number="nuevaPrenda.precio" class="form-control" placeholder="Precio" min="0" step="0.01" required>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-success w-100">Agregar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card shadow mb-4">
+            <div class="card-body">
+                <h3 class="card-title text-center">Prendas en Almacen</h3>
+                <table class="table table-striped table-hover table-bordered">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Descripcion</th>
+                            <th>Cantidad</th>
+                            <th>Precio</th>
+                            <th>Importe</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-if="prendas.length === 0">
+                            <td colspan="5" class="text-center text-muted">No hay prendas agregadas.</td>
+                        </tr>
+                        <tr v-else v-for="(prenda, index) in prendas" :key="index">
+                            <td>{{ prenda.nombre }}</td>
+                            <td class="d-flex align-items-center justify-content-center">
+                                <button @click="decrementarCantidad(index)" class="btn btn-sm btn-outline-danger me-2" :disabled="prenda.cantidad <= 1">-</button>
+                                {{ prenda.cantidad }}
+                                <button @click="incrementarCantidad(index)" class="btn btn-sm btn-outline-success ms-2">+</button>
+                            </td>
+                            <td>${{ prenda.precio.toFixed(2) }}</td>
+                            <td>${{ importePrenda(index).toFixed(2) }}</td>
+                            <td>
+                                <button @click="eliminarPrenda(index)" class="btn btn-sm btn-outline-warning">Eliminar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div v-if="prendas.length > 0" class="card shadow">
+            <div class="card-body bg-secondary text-white">
+                <h3 class="card-title text-center">Totales</h3>
+                <div class="row text-center">
+                    <div class="col-md-6">
+                        <p class="h5"><strong>Total de Prendas:</strong> {{ totalPrendas }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="h5"><strong>Total de Dinero:</strong> ${{ totalDinero.toFixed(2) }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <script src="./Js/vue_35.js"></script>
+    <script src="./Js/script.js"></script>
+</body>
+</html>
